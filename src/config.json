@@ -1,5 +1,15 @@
 {
   "api": { 
-    "invokeUrl": "https://5bltcq602h.execute-api.us-west-2.amazonaws.com/prod"
-  } 
+    "invokeUrl": ""
+  },
+  "org-0": {
+    "REGION": "us-east-1",
+    "USER_POOL_ID": "us-east-1_VP5BMm3Hl",
+    "APP_CLIENT_ID": "2o2ctvmn44qijftg93t62n9vqa"
+  },
+  "org-1": {
+    "REGION": "us-east-1",
+    "USER_POOL_ID": "us-east-1_oq7SQKeHR",
+    "APP_CLIENT_ID": "34nn6p3te8a2shg2ek7cgpjf6b"
+  }
 }

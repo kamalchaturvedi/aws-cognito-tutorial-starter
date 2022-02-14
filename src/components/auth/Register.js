@@ -1,13 +1,16 @@
 import React, { Component } from 'react';
 import FormErrors from "../FormErrors";
 import Validate from "../utility/FormValidation";
-
+import { Auth } from "aws-amplify"
+import Amplify from 'aws-amplify';
+import config from '../../config';
 class Register extends Component {
   state = {
     username: "",
     email: "",
     password: "",
     confirmpassword: "",
+    orgname: "",
     errors: {
       cognito: null,
       blankfield: false,
@@ -38,6 +41,31 @@ class Register extends Component {
     }
 
     // AWS Cognito integration here
+    const { username, email, password, orgname } = this.state;
+    Amplify.Auth.configure({
+        mandatorySignId: true,
+        region: config[orgname].REGION,
+        userPoolId: config[orgname].USER_POOL_ID,
+        userPoolWebClientId: config[orgname].APP_CLIENT_ID
+    })
+    try {
+      const signUpResponse = await Auth.signUp({
+        username, password, attributes: {
+          email: email
+        }
+      })
+      console.log(signUpResponse);
+      this.props.history.push("/welcome");
+    }catch(error) {
+      let err = null;
+      !error.message ? err = { "message": error} : err = error;
+      this.setState({
+        errors: {
+          ...this.state.errors,
+          cognito: err
+        }
+      })
+    }
   };
 
   onInputChange = event => {
@@ -111,6 +139,22 @@ class Register extends Component {
                 />
                 <span className="icon is-small is-left">
                   <i className="fas fa-lock"></i>
+                </span>
+              </p>
+            </div>
+            <div className="field">
+              <p className="control has-icons-left has-icons-right">
+                <input 
+                  className="input" 
+                  type="orgname"
+                  id="orgname"
+                  aria-describedby="emailHelp"
+                  placeholder="Enter Org Name"
+                  value={this.state.orgname}
+                  onChange={this.onInputChange}
+                />
+                <span className="icon is-small is-left">
+                  <i className="fas fa-envelope"></i>
                 </span>
               </p>
             </div>
